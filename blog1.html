@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Seasonal Weather Pattern Analysis with Kafka, Spark Streaming, and Cassandra</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; }
+        .container { width: 80%; margin: 20px auto; }
+        h1 { color: #333; }
+        h2 { color: #444; margin-top: 1.5em; }
+        p { margin-bottom: 1em; }
+        code { background: #f4f4f4; padding: 2px 4px; font-size: 1em; }
+        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Real-Time Seasonal Weather Pattern Analysis with Kafka, Spark Streaming, and Cassandra</h1>
+        <p>This guide will walk you through a real-time weather pattern analysis project using Apache Kafka for data streaming, Spark Streaming for processing, and Cassandra as a scalable database for storage. This setup is ideal for analyzing seasonal weather trends in real time.</p>
+
+        <h2>Project Overview</h2>
+        <p>In this project, we’ll simulate a real-time weather data stream with Kafka, process it with Spark Streaming, and store results in Cassandra for quick, scalable access. The steps are split across two days for ease of completion.</p>
+
+        <h2>Tech Stack</h2>
+        <ul>
+            <li><strong>Apache Kafka</strong>: For real-time data streaming.</li>
+            <li><strong>Apache Spark Streaming</strong>: For real-time data processing.</li>
+            <li><strong>Apache Cassandra</strong>: For efficient storage and querying of processed data.</li>
+            <li><strong>Python (PySpark)</strong>: For coding the data pipeline.</li>
+        </ul>
+
+        <h2>Day 1: Environment Setup and Data Streaming</h2>
+
+        <h3>Step 1: Install and Configure Kafka</h3>
+        <p><strong>1. Download and Install Apache Kafka</strong>: Follow the <a href="https://kafka.apache.org/quickstart">Kafka installation guide</a> for your operating system.</p>
+        <p><strong>2. Start Kafka and Zookeeper</strong>: Start Zookeeper, then the Kafka broker.</p>
+        <p><strong>3. Create a Kafka Topic</strong> for streaming weather data:</p>
+        <pre><code>kafka-topics.bat --create --topic weather_data --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1</code></pre>
+
+        <h3>Step 2: Install and Set Up Cassandra</h3>
+        <p><strong>1. Install Cassandra</strong>: Download and start Cassandra.</p>
+        <p><strong>2. Create Keyspace and Table</strong>:</p>
+        <pre><code>CREATE KEYSPACE weather_keyspace WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};</code></pre>
+        <pre><code>CREATE TABLE weather_keyspace.weather_data (
+    timestamp TIMESTAMP,
+    season TEXT,
+    temperature FLOAT,
+    precipitation FLOAT,
+    PRIMARY KEY (season, timestamp)
+);</code></pre>
+
+        <h3>Step 3: Simulate Real-Time Data and Send to Kafka</h3>
+        <p>Use Python to simulate real-time data and produce it to Kafka:</p>
+        <pre><code>from kafka import KafkaProducer
+import json
+import time
+
+producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+while True:
+    data = {'timestamp': time.time(), 'season': 'summer', 'temperature': 85, 'precipitation': 0.2}
+    producer.send('weather_data', value=data)
+    time.sleep(2)</code></pre>
+
+        <h3>Step 4: Set Up Spark Streaming in Visual Studio Code</h3>
+        <p>Install necessary libraries in your Python environment:</p>
+        <pre><code>pip install pyspark kafka-python cassandra-driver</code></pre>
+        <p>Set up Spark Streaming to consume data from Kafka.</p>
+
+        <h2>Day 2: Real-Time Data Processing and Analysis</h2>
+
+        <h3>Step 1: Set Up Spark Streaming Job</h3>
+        <p>Create a Spark Streaming job to pull data from Kafka and process it in real-time:</p>
+        <pre><code>from pyspark.sql import SparkSession
+from pyspark.sql.functions import from_json, col
+from pyspark.sql.types import StructType, StringType, FloatType, TimestampType
+
+spark = SparkSession.builder.appName("RealTimeWeatherAnalysis").getOrCreate()
+df = spark.readStream.format("kafka") \
+    .option("kafka.bootstrap.servers", "localhost:9092") \
+    .option("subscribe", "weather_data") \
+    .load()
+
+schema = StructType().add("timestamp", TimestampType()) \
+                     .add("season", StringType()) \
+                     .add("temperature", FloatType()) \
+                     .add("precipitation", FloatType())
+
+weather_data = df.select(from_json(col("value").cast("string"), schema).alias("data")).select("data.*")</code></pre>
+
+        <h3>Step 2: Aggregate Data and Store in Cassandra</h3>
+        <p>Aggregate seasonal trends and write data to Cassandra:</p>
+        <pre><code>from pyspark.sql.functions import avg, window
+
+seasonal_trends = weather_data \
+    .groupBy("season", window("timestamp", "1 hour")) \
+    .agg(avg("temperature").alias("avg_temperature"), avg("precipitation").alias("avg_precipitation"))
+
+seasonal_trends.writeStream \
+    .format("org.apache.spark.sql.cassandra") \
+    .option("keyspace", "weather_keyspace") \
+    .option("table", "weather_data") \
+    .outputMode("append") \
+    .start()</code></pre>
+
+        <h3>Step 3: Visualize Real-Time Data</h3>
+        <p>Retrieve and visualize data from Cassandra in Python or a BI tool like Tableau.</p>
+
+        <h2>Conclusion</h2>
+        <p>This guide provides a framework for building a real-time data pipeline for analyzing weather patterns. With Kafka, Spark Streaming, and Cassandra, you can process and store data efficiently for real-time insights.</p>
+    </div>
+</body>
+</html>
