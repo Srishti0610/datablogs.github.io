@@ -3,72 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Introduction - Srishti Madan Raikar</title>
+    <title>Srishti Madan Raikar - Data Engineering Blog</title>
     <style>
+        /* Basic styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f4f6f9;
             color: #333;
             margin: 0;
             padding: 0;
         }
+        
+        /* Container styling */
         .container {
             max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
+            margin: 50px auto;
+            padding: 25px;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
+        
+        /* Header and sections */
         h1, h2 {
             color: #2c3e50;
         }
-        .bio-section, .connect-section {
+        
+        /* Flexbox for image and bio */
+        .intro-section {
+            display: flex;
+            align-items: center;
             margin-bottom: 20px;
         }
-        .connect-section a {
-            color: #3498db;
-            text-decoration: none;
+        
+        .photo-placeholder {
+            width: 150px;
+            height: 150px;
+            background-color: #ecf0f1;
+            border-radius: 50%;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #7f8c8d;
             font-weight: bold;
         }
-        .connect-section a:hover {
-            text-decoration: underline;
-        }
+        
+        /* Skills styling */
         .skills-list {
             list-style-type: none;
             padding: 0;
         }
+        
         .skills-list li {
             background-color: #ecf0f1;
             margin: 5px 0;
             padding: 10px;
             border-radius: 5px;
         }
+        
+        /* Connect section */
+        .connect-section a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .connect-section a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Welcome to Srishti Madan Raikar's Data Engineering Blog</h1>
+    <!-- Title of the page -->
+    <h1>Welcome to My Data Engineering Blog</h1>
 
-    <div class="bio-section">
-        <h2>About Me</h2>
-        <p>Hello! I'm Srishti Madan Raikar, a Data Engineering enthusiast and current Master's student at the University of Texas at Arlington, specializing in Computer Science. I enjoy exploring data engineering topics, from ETL pipelines to advanced database systems, and I aim to share insights and tutorials that can help you on your own data engineering journey.</p>
+    <!-- Introduction section with photo placeholder -->
+    <div class="intro-section">
+        <div class="photo-placeholder">
+            Photo
+        </div>
+        <div>
+            <h2>Hi, I'm Srishti Madan Raikar</h2>
+            <p>I'm a Data Engineering enthusiast and a Master's student in Computer Science at the University of Texas at Arlington. Passionate about transforming data into actionable insights, I use this blog to share my experiences, tutorials, and projects in data engineering, cloud computing, and more.</p>
+        </div>
     </div>
 
+    <!-- Skills and Interests section -->
     <div class="skills-section">
         <h2>Skills and Interests</h2>
         <ul class="skills-list">
-            <li>Programming: Python, SQL, Java</li>
-            <li>Data Engineering Tools: Apache Airflow, Cassandra, MongoDB, Spark</li>
-            <li>Cloud Platforms: AWS, Azure</li>
-            <li>Containerization: Docker</li>
+            <li><strong>Programming:</strong> Python, SQL, Java</li>
+            <li><strong>Data Engineering Tools:</strong> Apache Airflow, Cassandra, MongoDB, Spark</li>
+            <li><strong>Cloud Platforms:</strong> AWS, Azure</li>
+            <li><strong>Containerization:</strong> Docker</li>
         </ul>
     </div>
 
+    <!-- Connect with me section -->
     <div class="connect-section">
         <h2>Connect with Me</h2>
-        <p>I'm always open to discussing data engineering projects, job opportunities, or collaborating on interesting ideas! Feel free to reach out through my LinkedIn or email me directly.</p>
+        <p>If you’re interested in discussing data engineering, collaborating, or just connecting, reach out to me on LinkedIn or send me an email. I look forward to connecting!</p>
         <p><a href="https://www.linkedin.com/in/srishtimadanraikar/" target="_blank">LinkedIn</a> | <a href="mailto:srishtimadanraikar@gmail.com">Email</a></p>
     </div>
 </div>
